@@ -1,8 +1,9 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, createContext} from 'react';
 import React from 'react';
 import axios from 'axios';
 import {TweetArea} from './MyStyle';
 import {didUserLikeDislikeTweet } from './Handler';
+import Comment from './Comment';
 
 
 const token = document.getElementsByName("csrfmiddlewaretoken")[0].value
@@ -89,10 +90,10 @@ const App = ()=>{
         data.map(item=>item.like==true?numberLike+=1:"")
         return numberLike
     }
- 
-    let readyToComment = false;
 
-    const hand = () =>{ readyToComment = !readyToComment}
+    const handleComment = (id) =>{
+        setElememt(document.getElementById("your-comment"+id).setAttribute("class", "hello world"))
+    }
 
     return (
         <>
@@ -111,7 +112,7 @@ const App = ()=>{
                         <div className='col-lg-9'>
                            <form onSubmit={handleSubmit}>
                                 <div className='row m-1 '>
-                                    <label hidden htmlFor="your-tweet">text</label>
+                                    <label hidden htmlFor="your-comment">text</label>
                                     <textarea maxLength={200} onChange={(e)=>setNewTweet(e.target.value)} name="tweet" value={newTweet||""} className="form-control-plaintext border border-1 rounded-3" id="your-tweet" placeholder="What's happing in the World?" style={{backgroundColor:"#D3D3D3", resize:"none", overflow:"hidden", outlineStyle:"none"}}></textarea>
                                 </div>
                                 <div className='row m-1'>
@@ -131,20 +132,17 @@ const App = ()=>{
                         </div>
                     </div>
 
-                    {/* Display each tweet and comment with all  he like that go with it. */}
+                    {/* Display each tweet and comment with all  the like that go with it. */}
                     {data?data.map(item =>
-                    <div href="chart" className='row p-4 m-2' style={{backgroundColor:"#DDDAE2"}}>
+                    <div key={item.id} href="chart" className='row p-4 m-2 rounded-2' style={{backgroundColor:"white"}}>
                         <div className='col-3' style={{backgroundColor:"#B4C1DB"}}>
                             <i className="material-icons" style={{fontSize:"50px", color:"blue"}}>person</i>
                         </div>
                         {/* Tweet, comment, like display */}
                         <div className='col-9'>
                             <div className='row'>
-                                <div className='col-4 fw-bold'>
-                                    {item.username}
-                                </div>
-                                <div className='col-8'>
-                                    {item.publish_date}
+                                <div className='row fw-bold'>
+                                    {item.username} @{item.publish_date}
                                 </div>
                             </div>
                             <div className='row p-2'> {item.text}</div>
@@ -155,15 +153,16 @@ const App = ()=>{
                                     <button onClick={()=>likeHandler(item)} id={item.id} className="fa fa-thumbs-o-up opacity-25 border-0" style={userLikeStyle(item.like)}>{numberlike(item.like)}</button>
                                 </div>
                                 <div className='col-4'>
-                                    <button className="far fa-comment-dots opacity-25 border-0" style={tweetComentAndOthersStyle}></button>
-                                    {/* To be review to show the textarea only when I click on the comment Icon */}
-                                    <textarea hidden maxLength={200} onChange={hand} name="tweet" className="form-control-plaintext border border-1 rounded-3" id="your-tweet" placeholder="Any comment?" style={{backgroundColor:"#D3D3D3", resize:"none", overflow:"hidden", outlineStyle:"none"}}></textarea>
+                                    <button data-bs-toggle="collapse" data-bs-target={"#your-comment"+item.id} className="far fa-comment-dots opacity-25 border-0" style={tweetComentAndOthersStyle}></button>
                                 </div>
                                 <div className='col-4'>
                                     <button className="fa fa-share-square-o opacity-25 border-0" style={tweetComentAndOthersStyle}></button>
                                 </div>
                             </div>
-
+                        </div>
+                        <div className='row'>
+                                 {/* To be review to show the textarea only when I click on the comment Icon */}
+                                 <Comment id={item}/>
                         </div>
                     </div>
                     ):console.log()

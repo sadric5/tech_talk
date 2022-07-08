@@ -9,6 +9,8 @@ class LikeDislikeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class CommentSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="comment_by.username", read_only=True)# get the username from the foreign key which is the user model.
+    publish_date = serializers.DateTimeField(source="comment_date", format="%Y-%m-%d %H:%M:%S", read_only=True)
     class Meta:
         model = Comment
         fields = "__all__"
