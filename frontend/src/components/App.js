@@ -4,6 +4,7 @@ import axios from 'axios';
 import {TweetArea} from './MyStyle';
 import {didUserLikeDislikeTweet } from './Handler';
 import Comment from './Comment';
+import {timeDelta} from "./Handler.js"
 
 
 const token = document.getElementsByName("csrfmiddlewaretoken")[0].value
@@ -142,7 +143,7 @@ const App = ()=>{
                         <div className='col-9'>
                             <div className='row'>
                                 <div className='row fw-bold'>
-                                    {item.username} @{item.publish_date}
+                                    {item.username} @ {timeDelta(item.publish_date)} ago
                                 </div>
                             </div>
                             <div className='row p-2'> {item.text}</div>
@@ -153,7 +154,7 @@ const App = ()=>{
                                     <button onClick={()=>likeHandler(item)} id={item.id} className="fa fa-thumbs-o-up opacity-25 border-0" style={userLikeStyle(item.like)}>{numberlike(item.like)}</button>
                                 </div>
                                 <div className='col-4'>
-                                    <button data-bs-toggle="collapse" data-bs-target={"#your-comment"+item.id} className="far fa-comment-dots opacity-25 border-0" style={tweetComentAndOthersStyle}></button>
+                                    <button data-bs-toggle="collapse" data-bs-target={"#your-comment"+item.id} className="far fa-comment-dots opacity-25 border-0" style={tweetComentAndOthersStyle}>{item.comment.length}</button>
                                 </div>
                                 <div className='col-4'>
                                     <button className="fa fa-share-square-o opacity-25 border-0" style={tweetComentAndOthersStyle}></button>
