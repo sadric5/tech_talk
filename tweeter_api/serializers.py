@@ -15,12 +15,14 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = "__all__"
         depth = 0
+        ordering = ["-comment_date"]
 
 class CreateUser(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id","username", "password", "email")
         extra_kwargs = {"password":{"write_only":True}}
+
 
 
 class TweetSerializer(serializers.ModelSerializer):

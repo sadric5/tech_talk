@@ -30,6 +30,8 @@ class Comment(models.Model):
     comment_date = models.DateTimeField(auto_now=True)
     def __str_(self):
         return f"{self.comment}"
+    class Meta:
+        ordering = ["-comment_date"]
 
 # class UsersAndTweets(models.Model):
 #     name = models.ForeignKey(User, on_delete=models.CASCADE)

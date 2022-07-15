@@ -16,6 +16,7 @@ const App = ()=>{
     const [data, setData] = useState()
     const [newTweet, setNewTweet] = useState("")
     const [rerenderBol, setRerederBol] = useState(true)
+    const [newComment, setnewComment] = useState('')
 
     // Get the data in the textarea form and send it to the API endpoint to create new intance in the database.
     const handleSubmit = (e)=>{
@@ -96,6 +97,19 @@ const App = ()=>{
         setElememt(document.getElementById("your-comment"+id).setAttribute("class", "hello world"))
     }
 
+    const handleNewComment = (e, id) => {
+        const url = "http://10.0.0.87:8000/comments/"
+        const paramsData = {"tweet": id, "comment": newComment, "comment_by": userId}
+        e.preventDefault();
+        axios.post(url, paramsData)
+        .then(res=>{
+            setnewComment("")
+            setRerederBol(!rerenderBol)
+        })
+        .catch(e =>console.error(e))
+
+    }
+
     return (
         <>
         <div className='container' style={{backgroundColor:"#D3D3D3"}}>
@@ -162,8 +176,31 @@ const App = ()=>{
                             </div>
                         </div>
                         <div className='row'>
-                                 {/* To be review to show the textarea only when I click on the comment Icon */}
-                                 <Comment id={item}/>
+                            {/* Comment Section For Each Tweet*/}
+                            <div className="row form-control-plaintext collapse" id={"your-comment"+item.id }>
+                                    <div className='row'>
+                                        <form onSubmit={(e)=>handleNewComment(e, item.id)}>
+                                            <div className="input-group my-2">
+                                                <span className="input-group-text" style={{backgroundColor:"#fff", border:'none'}}> <i className="material-icons" style={{fontSize:"20px", color:"blue"}}>person</i> </span>
+                                                <textarea maxLength={200} id="tweet-comment" onChange={(e)=>setnewComment(e.target.value)} value={newComment || ""} placeholder='Any comment?' name="comment" className="form-control border border-1 overflow-hidden border border-0 border-top-1 rounded"  aria-label="With textarea" style={{backgroundColor:"#D7DAE0", resize:"none", overflow:"hidden", outlineStyle:"none", border:"none"}}> </textarea>
+                                                <button tyepe="submit" className="input-group-text btn border-0" style={{backgroundColor:"#fff", border:'none'}}> <i className="material-icons">send</i> </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    {item.comment.map(item =>
+                                        <div className="row mx-3 mb-4 bg-white border border-1 border-opacity-2 border-start-0 border-end-0 border-bottom-0" key={item.id} style={{backgroundColor:"#DDDAE2"}}>
+                                            <div className="col-1 m-0 p-0 me-2">
+                                                <span className="input-group-text" style={{backgroundColor:"#FFFFFF", border:"none"}}> <i className="material-icons" style={{fontSize:"20px", color:"blue"}}>person</i></span>
+                                            </div>
+                                            <div className="col-10 ms-1">
+                                                <div className='row fw-bold'>
+                                                    {item.username} . {timeDelta(item.publish_date)} ago
+                                                </div>
+                                                <div className='row p-2'>{item.comment}</div>
+
+                                            </div>
+                                        </div>)}
+                            </div>
                         </div>
                     </div>
                     ):console.log()
