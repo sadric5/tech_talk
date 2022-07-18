@@ -11,6 +11,17 @@ const token = document.getElementsByName("csrfmiddlewaretoken")[0].value
 axios.defaults.headers.common["X-CSRFToken"] = token
 const userId = document.getElementById("user-id").innerHTML
 
+const socket = new WebSocket('ws://localhost:8080'); 
+// Connection opened
+socket.addEventListener('open', function (event) {
+    socket.send('Hello Server!');
+});
+
+// Listen for messages
+socket.addEventListener('message', function (event) {
+    console.log('Message from server ', event.data);
+});
+
 const App = ()=>{
     const url = "http://10.0.0.87:8000/tweets/"
     const [data, setData] = useState()

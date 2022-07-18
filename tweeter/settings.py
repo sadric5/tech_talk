@@ -41,10 +41,12 @@ INSTALLED_APPS = [
     #my app
     "tweeter_api",
     "frontend",
+    "chat",
 
     #third party app
     "rest_framework",
     "corsheaders",
+    "channels",
 ]
 
 MIDDLEWARE = [
@@ -77,7 +79,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tweeter.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -138,3 +139,16 @@ CORS_ALLOWED_ORIGINS = [
 
 LOGIN_REDIRECT_URL ="/frontend"
 # LOGIN_URL = "/accounts/login"
+
+# Channels
+ASGI_APPLICATION = "tweeter.asgi.application"
+
+# Channels layers for multiple communication
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('10.0.0.95', 6379)],
+        },
+    },
+}

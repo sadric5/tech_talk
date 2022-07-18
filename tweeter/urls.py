@@ -23,4 +23,5 @@ urlpatterns = [
     path("accounts/login/", auth_views.LoginView.as_view()),
     path("", include("tweeter_api.urls")),
     path("frontend/", include("frontend.urls")),
+    path("chat/", include("chat.urls")),
 ]
