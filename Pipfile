@@ -9,6 +9,7 @@ django-rest-framework = "*"
 django-cors-headers = "*"
 channels = "*"
 channels-redis = "*"
+pillow = "*"
 
 [dev-packages]
 
